@@ -53,7 +53,7 @@ class InstagramAPI:
     #rank_token          # Rank token
     #IGDataPath          # Data storage path
 
-    def __init__(self, username, password, proxy , debug = False, IGDataPath = None):
+    def __init__(self, username, password, proxy=None, debug = False, IGDataPath = None):
         m = hashlib.md5()
         m.update(username.encode('utf-8') + password.encode('utf-8'))
         self.device_id = self.generateDeviceId(m.hexdigest())
@@ -73,7 +73,8 @@ class InstagramAPI:
             self.s = requests.Session()
             # if you need proxy make something like this:
             # self.s.proxies = {"https" : "http://proxyip:proxyport"}
-            self.s.proxies = {"http": self.proxy, "https": self.proxy}
+            if self.proxy:
+                self.s.proxies = {"http": self.proxy, "https": self.proxy}
             if (self.SendRequest('si/fetch_headers/?challenge_type=signup&guid=' + self.generateUUID(False), None, True)):
 
                 data = {'phone_id'   : self.generateUUID(True),
